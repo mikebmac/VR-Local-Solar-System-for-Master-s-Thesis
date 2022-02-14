@@ -1,0 +1,10 @@
+Modified by Michael MacKay
+
+Original Files From:
+NASA Solor System Exportation
+https://solarsystem.nasa.gov/resources/all/?order=pub_date+desc&per_page=50&page=0&search=&condition_1=1%3Ais_in_resource_list&fs=&fc=324&ft=&dp=&category=324
+
+International Space Station Model
+Jack Kelly
+CC 4.0 International
+https://sketchfab.com/3d-models/3december-2021-international-space-station-a91871ba086749a492c12976cdcf321b

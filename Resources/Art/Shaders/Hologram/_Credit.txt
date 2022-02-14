@@ -1,0 +1,3 @@
+MIT License
+Andy Duboc
+https://github.com/andydbc/HologramShader

@@ -1,0 +1,18 @@
+{
+    "name": "Core",
+    "rootNamespace": "MacKay",
+    "references": [
+        "GUID:530cda8ce29b2774983ab8dce27e07d2",
+        "GUID:75469ad4d38634e559750d17036d5f7c",
+        "GUID:e6cc8d9b68257274da3f9e75b0cc6b8b"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
