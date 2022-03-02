@@ -89,12 +89,12 @@ public class GameManager : MonoBehaviour
 
     private void LoadSatellites(CelestailObjectData parentPlanet)
     {
-        CelestailSpawner spawner = parentPlanet.celestailObject.GetComponent<CelestailSpawner>();
+        CelestialSpawner spawner = parentPlanet.celestailObject.GetComponent<CelestialSpawner>();
 
         if (!spawner)
         {
             LogWarning($"Attempted to load satellites without a CelestailSpawner on <b>{parentPlanet.objectName}</b>, creating a <i>CelestailSpawner</i>.");
-            spawner = parentPlanet.celestailObject.AddComponent<CelestailSpawner>();
+            spawner = parentPlanet.celestailObject.AddComponent<CelestialSpawner>();
         }
 
         SgtSpawnList spawnList = parentPlanet.celestailObject.GetComponent<SgtSpawnList>();
@@ -108,7 +108,7 @@ public class GameManager : MonoBehaviour
         spawnList.Category = parentPlanet.objectName;
         spawner.Category = parentPlanet.objectName;
 
-        foreach (CelestailSatelliteData satellite in parentPlanet.satellites)
+        foreach (CelestialSatelliteData satellite in parentPlanet.satellites)
         {
             if (!satellite.satellitePrefab)
             {

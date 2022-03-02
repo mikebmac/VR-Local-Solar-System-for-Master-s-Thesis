@@ -31,7 +31,6 @@ namespace MacKay.PlayerController.Ship
 
         public override void ExitState()
         {
-            
         }
 
         public override void CheckSwitchStates()

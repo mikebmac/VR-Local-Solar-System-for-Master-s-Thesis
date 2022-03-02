@@ -2,6 +2,7 @@ using System.Collections;
 using MacKay.Data;
 using UnityEngine;
 using DG.Tweening;
+using MacKay.Audio;
 using MacKay.PlayerController.Ship;
 
 namespace MacKay.UI
@@ -92,6 +93,8 @@ namespace MacKay.UI
             _leaveButtonCollider.enabled = false;
             Ctx.OrbitButtonLeave.transform.localScale = Vector3.zero;
             Ctx.OrbitProgressImage.fillAmount = 0f;
+            
+            AudioVOController.Instance.PlayOrbitVO(_planetNumber);
 
             Ctx.OrbitButtonOrbit.transform.DOScale(0f, 0.2f).SetEase(Ease.OutBounce)
                 .OnComplete(() =>
@@ -109,6 +112,8 @@ namespace MacKay.UI
             _leaveButtonCollider.enabled = false;
             Ctx.OrbitButtonOrbit.transform.localScale = Vector3.zero;
             Ctx.OrbitProgressImage.fillAmount = 0f;
+            
+            AudioVOController.Instance.StopOrbitVO(_planetNumber);
 
             Ctx.OrbitButtonLeave.transform.DOScale(0f, 0.2f).SetEase(Ease.OutBounce)
                 .OnComplete(() =>

@@ -26,9 +26,15 @@ namespace MacKay.UI
             return new UITouchScreenPlanetState(_context, this, planet, planetNumber);
         }
         
+        public UITouchScreenWarpingState Warping(CelestailObjectData planet, int planetNumber)
+        {
+            return new UITouchScreenWarpingState(_context, this, planet, planetNumber);
+        }
+        
         public UITouchScreenBaseState Orbit(CelestailObjectData planet, int planetNumber)
         {
             return new UITouchScreenOrbitState(_context, this, planet, planetNumber);
         }
+        
     }
 }

@@ -59,6 +59,8 @@ public class UITouchScreenPlanetState : UITouchScreenBaseState
     private void WarpRequest()
     {
         ShipActionHandler.Instance.WarpTo(_currentPlanet.warpPoint.target);
+        
+        SwitchState(Factory.Warping(_currentPlanet, _planetNumber));
     }
     
 }

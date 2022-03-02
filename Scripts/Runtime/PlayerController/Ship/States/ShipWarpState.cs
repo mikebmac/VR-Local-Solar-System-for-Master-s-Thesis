@@ -6,7 +6,6 @@ namespace MacKay.PlayerController.Ship
     public class ShipWarpState: ShipBaseState
     {
         private SgtFloatingTarget _warpTarget;
-        private int _planetNumber;
 
         public ShipWarpState(ShipStateMachine currentContext, ShipStateFactory shipStateFactory, SgtFloatingTarget 
         target, double distance) :

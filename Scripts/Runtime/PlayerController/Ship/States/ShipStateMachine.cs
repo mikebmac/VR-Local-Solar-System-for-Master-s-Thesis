@@ -29,6 +29,21 @@ namespace MacKay.PlayerController.Ship
         [Header("Ship Drive State")]
         [SerializeField] private PlayerXRInteractable_Joystick _throttleJoystick;
         public PlayerXRInteractable_Joystick ThrottleJoystick => _throttleJoystick;
+        [SerializeField] private bool _enablePitch = false;
+        public bool EnablePitch { 
+            get => _enablePitch;
+            set => _enablePitch = value;
+        }
+        [SerializeField] private bool _enableYaw = false;
+        public bool EnableYaw { 
+            get => _enableYaw;
+            set => _enableYaw = value;
+        }
+        [SerializeField] private bool _enableThrottle = false;
+        public bool EnableThrottle { 
+            get => _enableThrottle;
+            set => _enableThrottle = value;
+        }
         [SerializeField] private bool _enableStrafing = false;
         public bool EnableStrafing { 
             get => _enableStrafing;

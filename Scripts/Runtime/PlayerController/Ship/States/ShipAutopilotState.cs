@@ -15,6 +15,7 @@ namespace MacKay.PlayerController.Ship
         private float _startingRotation;
         private float _orbitDistanceMultiplier = 1.03f;
         private double _orbitTargetDistance;
+        private double _degreesPerSecond;
         private SgtFloatingOrbit _orbitLead;
         private IEnumerator _rotateForwardsOrbitPoint;
         private IEnumerator _orbitRadiusEase;
@@ -44,8 +45,7 @@ namespace MacKay.PlayerController.Ship
             // TODO remove once better distance created
             ShipActionHandler.Instance.InvokeCurrentPlanetUpdate(_orbitPoint.name, _orbitTargetDistance - 
                 _orbitPoint.transform.localScale.x);
-
-            AudioController.Instance.PlayAudio(AudioType.VO_ENTERING_ORBIT);
+            
             AudioEngineController.Instance.SetEngineAudio(AudioType.ENGINE_1X_LOOP);
             ThrusterController.Instance.SetThrusters(0.4f);
         }
@@ -96,7 +96,7 @@ namespace MacKay.PlayerController.Ship
             SwitchState(Factory.Warp(target, distance));
         }
 
-        private void CreateOrbitLead(double distance, float angle)
+        private void CreateOrbitLead(double distance, float angle, double degreesPerSecond)
         {
             if (_orbitLead != null) return;
             
@@ -106,7 +106,7 @@ namespace MacKay.PlayerController.Ship
             _orbitLead.ParentPoint = _orbitPoint;
             _orbitLead.Radius = distance;
             _orbitLead.Angle = angle + 10f;
-            _orbitLead.DegreesPerSecond = 1d;
+            _orbitLead.DegreesPerSecond = degreesPerSecond;
             _orbitLead.enabled = true;
         }
 
@@ -122,13 +122,15 @@ namespace MacKay.PlayerController.Ship
 
             double distance = SgtPosition.Distance(_orbitPoint.Position, Ctx.PlayerPosition.Position);
             _startingRotation = angle;
-            
-            CreateOrbitLead(distance, angle);
+            _degreesPerSecond = (360d * 500000d) / (Mathf.PI * _orbitTargetDistance * 2d);
+            if (_degreesPerSecond > 1f) _degreesPerSecond = 1f;
+
+            CreateOrbitLead(distance, angle, _degreesPerSecond);
             
             Ctx.AutoOrbit.ParentPoint = _orbitPoint;
             Ctx.AutoOrbit.Radius = distance;
             Ctx.AutoOrbit.Angle = angle;
-            Ctx.AutoOrbit.DegreesPerSecond = 1d;
+            Ctx.AutoOrbit.DegreesPerSecond = _degreesPerSecond;
             Ctx.AutoOrbit.enabled = true;
 
             Ctx.StartCoroutine(_updateUI);

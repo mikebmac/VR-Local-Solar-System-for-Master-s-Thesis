@@ -19,9 +19,9 @@ namespace MacKay.Data
         public float orbitPeriod;
         public float equatorialInclination;
         public CelestailWarpPointData warpPoint;
-        public CelestailSatelliteData[] satellites;
+        public CelestialSatelliteData[] satellites;
 
-        public CelestailObjectData (string objectName, float diameter, float mass, float density, float rotationPeriod, float orbitPeriod, CelestailWarpPointData warpPoint = null, CelestailSatelliteData[] satellites = null)
+        public CelestailObjectData (string objectName, float diameter, float mass, float density, float rotationPeriod, float orbitPeriod, CelestailWarpPointData warpPoint = null, CelestialSatelliteData[] satellites = null)
         {
             this.objectName = objectName;
             this.diameter = diameter;

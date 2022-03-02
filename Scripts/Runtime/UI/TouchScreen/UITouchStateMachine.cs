@@ -1,4 +1,4 @@
-using System;
+using MacKay.PlayerController.Ship;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -7,10 +7,11 @@ namespace MacKay.UI
     public class UITouchStateMachine : MonoBehaviour
     {
         [Header("Debug")] public bool _enableDebug;
-        
-        [Header("State General")] 
-        [SerializeField] private UITouchScreenBaseState _currentState;
 
+        [Header("State General")] 
+        [SerializeField] private ShipStateMachine _shipStateMachine;
+        public ShipStateMachine ShipStateMachine => _shipStateMachine;
+        [SerializeField] private UITouchScreenBaseState _currentState;
         [SerializeField] private InterfaceAnimManager _tutorialManager;
         public InterfaceAnimManager TutorialManager => _tutorialManager;
         [SerializeField] private InterfaceAnimManager _warpManager;

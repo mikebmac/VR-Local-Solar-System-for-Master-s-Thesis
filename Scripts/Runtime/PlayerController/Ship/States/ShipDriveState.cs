@@ -13,11 +13,13 @@ namespace MacKay.PlayerController.Ship
         private Vector2 _targetRotationAxis;
         private Vector2 _currentRotationAxis;
         private float _previousTime = -1f;
+        private float _previousDistanceCheckTime = -1f;
         private SgtFloatingObject _currentPlanet;
         private double _currentPlanetDistance;
         private List<SgtFloatingObject> _currentCelestialObjects = new List<SgtFloatingObject>();
         private IEnumerator _lowPriorityTick;
         private IEnumerator _engineAudioTick;
+        private IEnumerator _safetyDistanceCheck;
         private IEnumerator _spawnerInstancesWait;
 
         public ShipDriveState(ShipStateMachine currentContext, ShipStateFactory shipStateFactory) : base
@@ -38,9 +40,11 @@ namespace MacKay.PlayerController.Ship
 
             _lowPriorityTick = Cor_ShipDriveLowPriorityTick();
             _engineAudioTick = Cor_ShipEngineAudioTick();
+            _safetyDistanceCheck = Cor_SafetyDistanceCheck();
             
             Ctx.StartCoroutine(_lowPriorityTick);
             Ctx.StartCoroutine(_engineAudioTick);
+            Ctx.StartCoroutine(_safetyDistanceCheck);
         }
 
         public override void UpdateState()
@@ -55,10 +59,14 @@ namespace MacKay.PlayerController.Ship
                     x = Ctx.ThrottleCurve.Evaluate(Mathf.Abs(Ctx.ThrottleJoystick.JoystickAngle.x));
                     if (Ctx.ThrottleJoystick.JoystickAngle.x < 0) x *= -1;
                 }
-                
-                float y = Ctx.ThrottleCurve.Evaluate(Mathf.Abs(Ctx.ThrottleJoystick.JoystickAngle.y));
-                if (Ctx.ThrottleJoystick.JoystickAngle.y < 0) y *= -1;
-                
+
+                float y = 0;
+                if (Ctx.EnableThrottle)
+                {
+                    y = Ctx.ThrottleCurve.Evaluate(Mathf.Abs(Ctx.ThrottleJoystick.JoystickAngle.y));
+                    if (Ctx.ThrottleJoystick.JoystickAngle.y < 0) y *= -1;
+                }
+
                 UIController.Instance.SpeedometerController.SetThrottleDisplay(Ctx.ThrottleJoystick.JoystickAngle.y);
                 
                 _targetThrottle = new Vector2(x, y);
@@ -66,11 +74,20 @@ namespace MacKay.PlayerController.Ship
 
             if (_targetRotationAxis != Ctx.RotationJoystick.JoystickAngle)
             {
-                float x = Ctx.RotationCurve.Evaluate(Mathf.Abs(Ctx.RotationJoystick.JoystickAngle.x));
-                float y = Ctx.RotationCurve.Evaluate(Mathf.Abs(Ctx.RotationJoystick.JoystickAngle.y));
-                if (Ctx.RotationJoystick.JoystickAngle.x < 0) x *= -1;
-                if (Ctx.RotationJoystick.JoystickAngle.y < 0) y *= -1;
-                
+                float x = 0;
+                if (Ctx.EnableYaw)
+                {
+                    x = Ctx.RotationCurve.Evaluate(Mathf.Abs(Ctx.RotationJoystick.JoystickAngle.x));
+                    if (Ctx.RotationJoystick.JoystickAngle.x < 0) x *= -1;
+                }
+
+                float y = 0;
+                if (Ctx.EnablePitch)
+                {
+                    y = Ctx.RotationCurve.Evaluate(Mathf.Abs(Ctx.RotationJoystick.JoystickAngle.y));
+                    if (Ctx.RotationJoystick.JoystickAngle.y < 0) y *= -1;
+                }
+
                 _targetRotationAxis = new Vector2(x, y);
             }
 
@@ -103,6 +120,7 @@ namespace MacKay.PlayerController.Ship
             if(_lowPriorityTick != null) Ctx.StopCoroutine(_lowPriorityTick);
             if(_engineAudioTick != null) Ctx.StopCoroutine(_engineAudioTick);
             if(_spawnerInstancesWait != null) Ctx.StopCoroutine(_spawnerInstancesWait);
+            if(_safetyDistanceCheck != null) Ctx.StopCoroutine(_safetyDistanceCheck);
         }
 
         public override void CheckSwitchStates()
@@ -123,20 +141,19 @@ namespace MacKay.PlayerController.Ship
         
         private void HandlePositionChange()
         {
+            _previousDistanceCheckTime = Time.time;
+            
             foreach (SgtFloatingObject celestialObject in _currentCelestialObjects)
             {
                 float distance = (float)SgtPosition.Distance(Ctx.PlayerPosition.Position, celestialObject.Position);
-                float scale = celestialObject.transform.localScale.x;
-                float ratio = (distance - scale * 1.05f) / scale;
 
                 if (_currentPlanet == celestialObject) _currentPlanetDistance = distance;
 
-                if (ratio >= 1f) continue;
-                
-                bool hit = Physics.Raycast(Ctx.transform.position, Ctx.transform.forward, distance * 2f, Ctx.PlanetLayer);
+                bool hit = Physics.Raycast(Ctx.transform.position, Ctx.transform.forward, out var raycastHit, distance * 2f, Ctx.PlanetLayer);
 
-                float damping = 1f;
-                if (hit) damping = Ctx.SpeedDampingCurve.Evaluate(ratio);
+                float stopPlanetDistance = _currentPlanet.transform.localScale.x * 1.02f;
+                float ratio = raycastHit.distance / stopPlanetDistance;
+                float damping = hit ? Ctx.SpeedDampingCurve.Evaluate(ratio) : 1f;
 
                 Ctx.SpeedMin = Ctx.BaseSpeedMin * damping;
                 Ctx.SpeedMax = Ctx.BaseSpeedMax * damping;
@@ -170,7 +187,7 @@ namespace MacKay.PlayerController.Ship
             }
 
             _currentCelestialObjects.Add(_currentPlanet);
-            CelestailSpawner spawner = _currentPlanet.GetComponent<CelestailSpawner>();
+            CelestialSpawner spawner = _currentPlanet.GetComponent<CelestialSpawner>();
 
             if (spawner != null)
             {
@@ -210,6 +227,16 @@ namespace MacKay.PlayerController.Ship
                 ShipActionHandler.Instance.InvokeShipEngineAudioTick(UIController.Instance.CurrentSpeed);
 
                 yield return new WaitForSeconds(0.15f);
+            }
+        }
+
+        private IEnumerator Cor_SafetyDistanceCheck()
+        {
+            while (Ctx.CurrentState == this)
+            {
+                if (_previousDistanceCheckTime + 1f > Time.time) HandlePositionChange();
+
+                yield return new WaitForSeconds(1f);
             }
         }
         #endregion

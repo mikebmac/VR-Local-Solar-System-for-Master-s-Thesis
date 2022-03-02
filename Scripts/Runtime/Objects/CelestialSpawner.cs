@@ -1,14 +1,17 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using SpaceGraphicsToolkit;
 using MacKay.Data;
+using MacKay.PlayerController.Ship;
+using Random = UnityEngine.Random;
 
-public class CelestailSpawner : SgtFloatingSpawner
+public class CelestialSpawner : SgtFloatingSpawner
 {
     [SerializeField]
-    private List<CelestailSatelliteData> satellites = new List<CelestailSatelliteData>();
-    public List<CelestailSatelliteData> Satellites
+    private List<CelestialSatelliteData> satellites = new List<CelestialSatelliteData>();
+    public List<CelestialSatelliteData> Satellites
     {
         get { return satellites; }
         set { satellites = value; }
@@ -29,7 +32,14 @@ public class CelestailSpawner : SgtFloatingSpawner
         get { return oblatenessMax; } 
         set { oblatenessMax = value; } 
     }
+    
+    [SerializeField] 
+    private ShipStateMachine _shipStateMachine;
 
+    private void Start()
+    {
+        if (_shipStateMachine == null) _shipStateMachine = FindObjectOfType<ShipStateMachine>();
+    }
 
     protected override void SpawnAll()
     {
@@ -37,6 +47,14 @@ public class CelestailSpawner : SgtFloatingSpawner
         {
             return;
         }
+
+        StartCoroutine(Cor_SpawnSatellites());
+    }
+
+    private IEnumerator Cor_SpawnSatellites()
+    {
+        yield return new WaitUntil(() => _shipStateMachine.CurrentState is not ShipWarpState);
+        
         var parentPoint = CachedObject;
 
         BuildSpawnList();
@@ -50,7 +68,8 @@ public class CelestailSpawner : SgtFloatingSpawner
                 var tilt = new Vector3(Random.Range(-TiltMax, TiltMax), 0.0f, Random.Range(-TiltMax, TiltMax));
                 var oblateness = Random.Range(0.0f, OblatenessMax);
                 var orbitSpeed = 360f / Constants.ConvertYearsTo(Constants.TimeUnits.Seconds, satellites[i].orbitPeriod);
-                var position = SgtFloatingOrbit.CalculatePosition(parentPoint, radius, angle, tilt, Vector3.zero, oblateness);
+                var position =
+                    SgtFloatingOrbit.CalculatePosition(parentPoint, radius, angle, tilt, Vector3.zero, oblateness);
                 var instance = SpawnAt(position, i);
                 var orbit = instance.GetComponent<SgtFloatingOrbit>();
 

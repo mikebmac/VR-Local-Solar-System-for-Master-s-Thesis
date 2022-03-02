@@ -22,6 +22,7 @@ namespace MacKay.PlayerController.Ship
         {
             _ctx = currentContext;
             _factory = shipStateFactory;
+            
         }
         public abstract void EnterState();
         public abstract void UpdateState();
@@ -39,19 +40,20 @@ namespace MacKay.PlayerController.Ship
 
         protected void SwitchState(ShipBaseState newState)
         {
-            ExitState();
 
             if (newState._isRootState)
             {
+                _ctx.CurrentState.ExitState();
                 _ctx.CurrentState = newState;
             }
             else if (_currentSuperState != null)
             {
+                _ctx.CurrentState._currentSubState.ExitState();
                 _currentSuperState.SetSubState(newState);
             }
             
             newState.EnterState();
-            
+
         }
 
         protected void SetSuperState(ShipBaseState newSuperState)

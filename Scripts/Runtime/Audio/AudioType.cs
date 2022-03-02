@@ -49,6 +49,18 @@ namespace MacKay.Audio
         VO_WELCOME_TO_SATURN,
         VO_WELCOME_TO_URANUS,
         VO_WELCOME_TO_NEPTUNE,
-        
+        VO_ORBIT_MERCURY,
+        VO_ORBIT_VENUS,
+        VO_ORBIT_EARTH,
+        VO_ORBIT_MARS,
+        VO_ORBIT_JUPITER,
+        VO_ORBIT_SATURN,
+        VO_ORBIT_URANUS,
+        VO_ORBIT_NEPTUNE,
+        VO_TUTORIAL_00,
+        VO_TUTORIAL_01,
+        VO_TUTORIAL_02,
+        VO_TUTORIAL_03,
+        VO_TUTORIAL_04
     }
 }
