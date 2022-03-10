@@ -11687,7 +11687,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1112811019}
   m_LocalRotation: {x: -0.1340895, y: 0.01161341, z: 0.08550127, w: 0.9872055}
-  m_LocalPosition: {x: -233480290, y: -39651170, z: -1.1999947e+12}
+  m_LocalPosition: {x: -233480290, y: 9999, z: -1.1999947e+12}
   m_LocalScale: {x: 0, y: 0, z: 0}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -11708,12 +11708,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   position:
     LocalX: -30659552
-    LocalY: -38596208
+    LocalY: 1064960
     LocalZ: -39325824
     GlobalX: -4
     GlobalY: 0
     GlobalZ: -23999
-  expectedPosition: {x: -233480290, y: -39651170, z: -1.1999947e+12}
+  expectedPosition: {x: -233480290, y: 9999, z: -1.1999947e+12}
   expectedPositionSet: 1
   positionSet: 1
   seed: 0

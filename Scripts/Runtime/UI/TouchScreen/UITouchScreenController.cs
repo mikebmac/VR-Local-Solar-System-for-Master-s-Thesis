@@ -129,6 +129,7 @@ namespace MacKay.UI
 
         public void TogglePlayButton()
         {
+            Debug.Log($"Before: {_isPlayingMusic}");
             if (_isPlayingMusic)
             {
                 PauseSong();
@@ -137,6 +138,7 @@ namespace MacKay.UI
             {
                 UnpauseSong();
             }
+            Debug.Log($"After: {_isPlayingMusic}");
         }
 
         private void SetMusicVolume(float percent)
@@ -191,7 +193,9 @@ namespace MacKay.UI
         {
             _isPlayingMusic = false;
             
+            StopCoroutine(_musicCurrentProgress);
             AudioController.Instance.PauseAudio(_musicTracks[_currentTrack]);
+            
             CheckPlayState();
         }
 
