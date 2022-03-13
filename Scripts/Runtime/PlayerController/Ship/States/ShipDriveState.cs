@@ -186,13 +186,19 @@ namespace MacKay.PlayerController.Ship
                 
             }
 
+            Ctx.CurrentPlanet = _currentPlanet;
+
             _currentCelestialObjects.Add(_currentPlanet);
             CelestialSpawner spawner = _currentPlanet.GetComponent<CelestialSpawner>();
 
+            Ctx.CurrentPlanetSpawner = spawner;
+
             if (spawner != null)
             {
-                if (spawner.Satellites.Count > 0) yield return new WaitUntil(() => spawner.Instances.Count > 0);
+                spawner.SpawnAll();
                 
+                if (spawner.Satellites.Count > 0) yield return new WaitUntil(() => spawner.Instances.Count > 0);
+
                 foreach (SgtFloatingObject satellite in spawner.Instances)
                 {
                     _currentCelestialObjects.Add(satellite);

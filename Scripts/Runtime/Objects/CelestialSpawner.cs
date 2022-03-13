@@ -41,7 +41,7 @@ public class CelestialSpawner : SgtFloatingSpawner
         if (_shipStateMachine == null) _shipStateMachine = FindObjectOfType<ShipStateMachine>();
     }
 
-    protected override void SpawnAll()
+    public override void SpawnAll()
     {
         if (satellites.Count == 0)
         {
@@ -49,6 +49,24 @@ public class CelestialSpawner : SgtFloatingSpawner
         }
 
         StartCoroutine(Cor_SpawnSatellites());
+    }
+    
+    public override void DespawnAll()
+    {
+        if (instances != null)
+        {
+            for (var i = instances.Count - 1; i >= 0; i--)
+            {
+                var instance = instances[i];
+
+                if (instance != null)
+                {
+                    SgtHelper.Destroy(instance.gameObject);
+                }
+            }
+
+            instances.Clear();
+        }
     }
 
     private IEnumerator Cor_SpawnSatellites()

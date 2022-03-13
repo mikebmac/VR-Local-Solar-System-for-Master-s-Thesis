@@ -42,6 +42,7 @@ namespace MacKay.PlayerController.Ship
 
         public void WarpTo(SgtFloatingTarget target)
         {
+            
             OnWarpRequest?.Invoke(target);
         }
 

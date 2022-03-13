@@ -1,7 +1,5 @@
 using System.Collections;
-using MacKay.Audio;
 using UnityEngine;
-using AudioType = MacKay.Audio.AudioType;
 
 namespace MacKay.PlayerController.Ship
 {

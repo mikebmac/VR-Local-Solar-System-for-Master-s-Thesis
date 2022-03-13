@@ -42,6 +42,8 @@ namespace MacKay.PlayerController.Ship
 
         private void StartWarpSequence()
         {
+            if (Ctx.CurrentPlanetSpawner != null) Ctx.CurrentPlanetSpawner.DespawnAll();
+            
             Ctx.WarpLens.transform.localPosition = Ctx.WarpStartPosition;
             Ctx.WarpLens.WarpOuter = _warpOuterSizeReset;
             Ctx.WarpLens.HoleSize = _warpHoleSizeReset;

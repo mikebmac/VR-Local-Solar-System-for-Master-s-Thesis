@@ -21,7 +21,20 @@ namespace MacKay.PlayerController.Ship
         private ShipStateFactory _states;
         [SerializeField] private SgtFloatingCamera _playerPosition;
         public SgtFloatingCamera PlayerPosition => _playerPosition;
-        
+
+        private SgtFloatingObject _currentPlanet;
+        public SgtFloatingObject CurrentPlanet
+        {
+            get => _currentPlanet;
+            set => _currentPlanet = value;
+        }
+
+        private CelestialSpawner _currentPlanetSpawner;
+        public CelestialSpawner CurrentPlanetSpawner
+        {
+            get => _currentPlanetSpawner;
+            set => _currentPlanetSpawner = value;
+        }
         #endregion
         
         
