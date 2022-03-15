@@ -75,18 +75,12 @@ namespace MacKay.PlayerController.Ship
             if (_targetRotationAxis != Ctx.RotationJoystick.JoystickAngle)
             {
                 float x = 0;
-                if (Ctx.EnableYaw)
-                {
-                    x = Ctx.RotationCurve.Evaluate(Mathf.Abs(Ctx.RotationJoystick.JoystickAngle.x));
-                    if (Ctx.RotationJoystick.JoystickAngle.x < 0) x *= -1;
-                }
+                x = Ctx.RotationCurve.Evaluate(Mathf.Abs(Ctx.RotationJoystick.JoystickAngle.x));
+                if (Ctx.RotationJoystick.JoystickAngle.x < 0) x *= -1;
 
                 float y = 0;
-                if (Ctx.EnablePitch)
-                {
-                    y = Ctx.RotationCurve.Evaluate(Mathf.Abs(Ctx.RotationJoystick.JoystickAngle.y));
-                    if (Ctx.RotationJoystick.JoystickAngle.y < 0) y *= -1;
-                }
+                y = Ctx.RotationCurve.Evaluate(Mathf.Abs(Ctx.RotationJoystick.JoystickAngle.y));
+                if (Ctx.RotationJoystick.JoystickAngle.y < 0) y *= -1;
 
                 _targetRotationAxis = new Vector2(x, y);
             }
@@ -100,9 +94,11 @@ namespace MacKay.PlayerController.Ship
             if (_currentRotationAxis != _targetRotationAxis)
             {
                 _currentRotationAxis = _targetRotationAxis;
-                
-                float pitch = Ctx.RotationJoystick.JoystickAngle.y * Ctx.RotationMultiplier;
-                float yaw = Ctx.RotationJoystick.JoystickAngle.x * Ctx.RotationMultiplier;
+
+                float pitch = Ctx.EnablePitch ? Ctx.RotationJoystick.JoystickAngle.y * Ctx.RotationMultiplier : 0f;
+                float yaw = Ctx.EnableYaw ? Ctx.RotationJoystick.JoystickAngle.x * Ctx.RotationMultiplier : 0f;
+                //float pitch = Ctx.RotationJoystick.JoystickAngle.y * Ctx.RotationMultiplier;
+                //float yaw = Ctx.RotationJoystick.JoystickAngle.x * Ctx.RotationMultiplier;
 
                 Quaternion localRotation = Ctx.transform.localRotation;
                 Quaternion rotation = localRotation * Quaternion.Euler(pitch, yaw, 0f);

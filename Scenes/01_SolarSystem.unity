@@ -7549,8 +7549,8 @@ MonoBehaviour:
   _playerPosition: {fileID: 737039541}
   _throttleJoystick: {fileID: 1989334470}
   _enablePitch: 0
-  _enableYaw: 0
-  _enableThrottle: 0
+  _enableYaw: 1
+  _enableThrottle: 1
   _enableStrafing: 0
   _throttleResponse: 10
   _throttleCurve:
@@ -7588,14 +7588,14 @@ MonoBehaviour:
     m_RotationOrder: 4
   _currentThrottle: {x: 0, y: 0}
   _rotationJoystick: {fileID: 1826016178}
-  _rotationMultiplier: 15
+  _rotationMultiplier: 14
   _rotationDamping: 2
   _rotationCurve:
     serializedVersion: 2
     m_Curve:
     - serializedVersion: 3
-      time: 0
-      value: 0
+      time: -0.01266861
+      value: 0.011474609
       inSlope: 0
       outSlope: 0
       tangentMode: 0
@@ -7612,8 +7612,8 @@ MonoBehaviour:
       inWeight: 0.33333334
       outWeight: 0.33333334
     - serializedVersion: 3
-      time: 1
-      value: 1
+      time: 1.0054932
+      value: 1.00177
       inSlope: 2
       outSlope: 2
       tangentMode: 0
